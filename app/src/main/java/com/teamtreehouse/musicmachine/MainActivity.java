@@ -62,33 +62,21 @@ public class MainActivity extends AppCompatActivity {
         mDownloadButton = (Button) findViewById(R.id.downloadButton);
         mPlayButton = (Button) findViewById(R.id.playButton);
 
-        mDownloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Downloading", Toast.LENGTH_SHORT).show();
-
-                // Send Messages to Handler for processing
-                for (Song song : Playlist.songs) {
-                    Intent intent = new Intent(MainActivity.this, DownloadIntentService.class);
-                    intent.putExtra(KEY_SONG, song);
-                    startService(intent);
-                }
-            }
+        mDownloadButton.setOnClickListener(v -> {
+            //downloadSongs();
+            testIntents();
         });
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBound) {
-                    Intent intent = new Intent(MainActivity.this, PlayerService.class);
-                    startService(intent);
-                    Message message = Message.obtain();
-                    message.arg1 = 2;
-                    message.replyTo = mActivityMessenger;
-                    try {
-                        mServiceMessenger.send(message);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+        mPlayButton.setOnClickListener(v -> {
+            if (mBound) {
+                Intent intent = new Intent(MainActivity.this, PlayerService.class);
+                startService(intent);
+                Message message = Message.obtain();
+                message.arg1 = 2;
+                message.replyTo = mActivityMessenger;
+                try {
+                    mServiceMessenger.send(message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -100,6 +88,23 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
+    }
+
+    private void testIntents() {
+        // Explicit intent
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
+    }
+
+    private void downloadSongs() {
+        Toast.makeText(MainActivity.this, "Downloading", Toast.LENGTH_SHORT).show();
+
+        // Send Messages to Handler for processing
+        for (Song song : Playlist.songs) {
+            Intent intent = new Intent(MainActivity.this, DownloadIntentService.class);
+            intent.putExtra(KEY_SONG, song);
+            startService(intent);
+        }
     }
 
     public void changePlayButtonText(String text) {

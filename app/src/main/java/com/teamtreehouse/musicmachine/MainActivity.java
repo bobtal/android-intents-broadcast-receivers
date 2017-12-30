@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -24,9 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String EXTRA_TITLE = "EXTRA_TITLE";
-    public static final String KEY_SONG = "song";
+    public static final String EXTRA_SONG = "EXTRA_SONG";
     public static final int REQUEST_FAVORITE = 0;
     public static final String EXTRA_FAVORITE = "EXTRA_FAVORITE";
+    public static final String EXTRA_LIST_POSITION = "EXTRA_LIST_POSITION";
 
     private boolean mBound = false;
     private Button mDownloadButton;
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         // Send Messages to Handler for processing
         for (Song song : Playlist.songs) {
             Intent intent = new Intent(MainActivity.this, DownloadIntentService.class);
-            intent.putExtra(KEY_SONG, song);
+            intent.putExtra(EXTRA_SONG, song);
             startService(intent);
         }
     }

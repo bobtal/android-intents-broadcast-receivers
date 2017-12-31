@@ -73,3 +73,14 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+.DS_Store
+app/.DS_Store
+app/src/.DS_Store
+app/src/main/.DS_Store
+app/src/main/res/.DS_Store
+app/src/main/res/mipmap-hdpi/
+app/src/main/res/mipmap-mdpi/
+app/src/main/res/mipmap-xhdpi/.DS_Store
+app/src/main/res/mipmap-xxhdpi/
+app/src/main/res/mipmap-xxxhdpi/
+/local.properties

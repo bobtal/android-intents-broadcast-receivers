@@ -139,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 boolean result = data.getBooleanExtra(EXTRA_FAVORITE, false);
                 Log.i(TAG, "Is favorite? " + result);
+                int position = data.getIntExtra(EXTRA_LIST_POSITION, 0);
+                Playlist.songs[position].setIsFavorite(result);
+                mAdapter.notifyItemChanged(position);
             }
         }
     }

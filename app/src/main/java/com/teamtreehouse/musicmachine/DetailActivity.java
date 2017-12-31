@@ -15,8 +15,10 @@ import com.teamtreehouse.musicmachine.models.Song;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private Song mSong;
+    private Song song;
     private RelativeLayout rootLayout;
+
+    public static final String SHARE_SONG = "com.teamtreehouse.intent.action.SHARE_SONG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // check if it's an implicit intent coming from "outside"
         // or if it's an explicit intent coming from our app
-        if (intent.getAction().equals(Intent.ACTION_SEND)) {
+        if (Intent.ACTION_SEND.equals(intent.getAction())) {
             // implicit intent coming from "outside"
             handleSendIntent(intent);
         } else {
@@ -42,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
 //            titleLabel.setText(songTitle);
 //        }
             if (intent.getParcelableExtra(MainActivity.EXTRA_SONG) != null) {
-                Song song = intent.getParcelableExtra(MainActivity.EXTRA_SONG);
+                song = intent.getParcelableExtra(MainActivity.EXTRA_SONG);
                 titleLabel.setText(song.getTitle());
                 favoriteCheckbox.setChecked(song.isFavorite());
             }
@@ -78,6 +80,15 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+
+        if (itemId == R.id.action_share) {
+            if (song != null) {
+                Intent customIntent = new Intent(SHARE_SONG);
+                customIntent.putExtra(MainActivity.EXTRA_SONG, song);
+                Intent chooser = Intent.createChooser(customIntent, "Share song");
+                startActivity(chooser);
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }

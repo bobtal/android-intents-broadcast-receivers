@@ -10,11 +10,13 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.teamtreehouse.musicmachine.adapters.PlaylistAdapter;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Messenger mServiceMessenger;
     private Messenger mActivityMessenger = new Messenger(new ActivityHandler(this));
 
+    private RelativeLayout rootLayout;
     private PlaylistAdapter mAdapter;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDownloadButton = (Button) findViewById(R.id.downloadButton);
         mPlayButton = (Button) findViewById(R.id.playButton);
+        rootLayout = findViewById(R.id.rootLayout);
 
         mDownloadButton.setOnClickListener(v -> {
             //downloadSongs();
@@ -105,7 +109,27 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri geoLocation = Uri.parse("geo:0,0?q=41.989697, 21.459756(sedmica)");
         intent.setData(geoLocation);
-        startActivity(intent);
+        if (intent.resolveActivity(getPackageManager()) == null) {
+            // handle the error
+            Snackbar.make(rootLayout, "Sorry, nothing found to handle this request",
+                    Snackbar.LENGTH_LONG).show();
+            // sample code to direct a user to Google Play to download an app
+            // that can handle a specific kind of intent (map)
+//            Uri googlePlayUri = Uri.parse("market://search?q=maps&c=apps"); //this doesn't seem to work anymore
+            Uri googlePlayUri = Uri.parse("http://play.google.com/store/search?q=maps&c=apps");
+            Intent googlePlayIntent = new Intent(Intent.ACTION_VIEW);
+            googlePlayIntent.setData(googlePlayUri);
+
+            if (googlePlayIntent.resolveActivity(getPackageManager()) == null) {
+                Snackbar.make(rootLayout, "Sorry, nothing found to handle this request.", Snackbar.LENGTH_LONG).show();
+            }
+            else {
+                startActivity(googlePlayIntent);
+            }
+            // end of sample code
+        } else {
+            startActivity(intent);
+        }
     }
 
     private void downloadSongs() {

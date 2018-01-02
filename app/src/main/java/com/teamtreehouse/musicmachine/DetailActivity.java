@@ -85,8 +85,16 @@ public class DetailActivity extends AppCompatActivity {
             if (song != null) {
                 Intent customIntent = new Intent(SHARE_SONG);
                 customIntent.putExtra(MainActivity.EXTRA_SONG, song);
-                Intent chooser = Intent.createChooser(customIntent, "Share song");
-                startActivity(chooser);
+                // switching to a broadcast intent and receiver by getting rid of
+                // the below two lines and sending the intent via the
+                // sendBroadcast method vs the startActivity method
+//                Intent chooser = Intent.createChooser(customIntent, "Share song");
+//                startActivity(chooser);
+                // Custom broadcast intents and receivers work the same way
+                // as local broadcast. The only thing that's different from a system
+                // broadcast is that the custom components both utilize a shared
+                // common action
+                sendBroadcast(customIntent);
             }
         }
 

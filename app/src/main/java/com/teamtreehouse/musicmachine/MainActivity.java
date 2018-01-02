@@ -3,6 +3,7 @@ package com.teamtreehouse.musicmachine;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout rootLayout;
     private PlaylistAdapter mAdapter;
+
+    private NetworkConnectionReceiver receiver = new NetworkConnectionReceiver();
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -161,6 +164,22 @@ public class MainActivity extends AppCompatActivity {
             unbindService(mServiceConnection);
             mBound = false;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "App is in the foreground...");
+        IntentFilter intentFilter =
+                new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "App is in the background...");
+        unregisterReceiver(receiver);
     }
 
     @Override

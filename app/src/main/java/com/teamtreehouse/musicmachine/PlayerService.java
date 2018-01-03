@@ -1,6 +1,7 @@
 package com.teamtreehouse.musicmachine;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -14,6 +15,7 @@ import com.teamtreehouse.musicmachine.models.Song;
 
 public class PlayerService extends Service {
     private static final String TAG = PlayerService.class.getSimpleName();
+    private static final int REQUEST_OPEN = 99;
     private MediaPlayer mPlayer;
     public Messenger mMessenger = new Messenger(new PlayerHandler(this));
 
@@ -34,11 +36,16 @@ public class PlayerService extends Service {
             artist = song.getArtist();
         }
 
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, REQUEST_OPEN, mainIntent, 0);
+
         Notification.Builder notificationBuilder =
                 new Notification.Builder(this)
                     .setSmallIcon(R.drawable.ic_queue_music_white)
                     .setContentTitle(title)
-                    .setContentText(artist);
+                    .setContentText(artist)
+                    .setContentIntent(pendingIntent);
         Notification notification = notificationBuilder.build();
         startForeground(11, notification);
 

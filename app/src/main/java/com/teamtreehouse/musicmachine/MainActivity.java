@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         rootLayout = findViewById(R.id.rootLayout);
 
         mDownloadButton.setOnClickListener(v -> {
-            //downloadSongs();
-            testIntents();
+            downloadSongs();
+//            testIntents();
         });
         mPlayButton.setOnClickListener(v -> {
             if (mBound) {

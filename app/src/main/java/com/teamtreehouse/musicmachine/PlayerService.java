@@ -10,6 +10,8 @@ import android.os.Messenger;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.teamtreehouse.musicmachine.models.Song;
+
 public class PlayerService extends Service {
     private static final String TAG = PlayerService.class.getSimpleName();
     private MediaPlayer mPlayer;
@@ -23,8 +25,20 @@ public class PlayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Notification.Builder notificationBuilder = new Notification.Builder(this);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        String title = "";
+        String artist = "";
+
+        if (intent.getParcelableExtra(MainActivity.EXTRA_SONG) != null) {
+            Song song = intent.getParcelableExtra(MainActivity.EXTRA_SONG);
+            title = song.getTitle();
+            artist = song.getArtist();
+        }
+
+        Notification.Builder notificationBuilder =
+                new Notification.Builder(this)
+                    .setSmallIcon(R.drawable.ic_queue_music_white)
+                    .setContentTitle(title)
+                    .setContentText(artist);
         Notification notification = notificationBuilder.build();
         startForeground(11, notification);
 

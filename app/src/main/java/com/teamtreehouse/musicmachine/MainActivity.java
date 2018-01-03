@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setOnClickListener(v -> {
             if (mBound) {
                 Intent intent = new Intent(MainActivity.this, PlayerService.class);
+                intent.putExtra(EXTRA_SONG, Playlist.songs[0]);
                 startService(intent);
                 Message message = Message.obtain();
                 message.arg1 = 2;
